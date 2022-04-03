@@ -1,4 +1,4 @@
-#!/usr/bin/python3.9
+#!/usr/bin/python3.6
 
 '''
 This script is designed to format hpp and cpp files which
@@ -20,6 +20,7 @@ import time  # to sleep
 import os  # to change directory
 import glob  # to find all *.hpp and *.cpp files
 import sys  # To get input from command line
+import shutil # For removing a directory
 
 OUTPUTDIR = "CLANG-CLEAN-OUT"
 
@@ -55,14 +56,21 @@ if __name__ == "__main__":
 
     # checking for hpp
     os.chdir("include")
+    if os.path.exists(OUTPUTDIR) and os.path.isdir(OUTPUTDIR):
+        shutil.rmtree(OUTPUTDIR)
     os.mkdir(OUTPUTDIR)
 
     for name in glob.glob("*.hpp"):
         FormatIt(name)
+        os.remove(OUTPUTDIR + "/" + name + ".clangout")
 
     # checking for cpp
     os.chdir("../src")
+    if os.path.exists(OUTPUTDIR) and os.path.isdir(OUTPUTDIR):
+        shutil.rmtree(OUTPUTDIR)
     os.mkdir(OUTPUTDIR)
 
     for name in glob.glob("*.cpp"):
         FormatIt(name)
+        os.remove(OUTPUTDIR + "/" + name + ".clangout")
+
